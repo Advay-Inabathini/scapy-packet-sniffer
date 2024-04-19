@@ -17,11 +17,10 @@ def start_sniffing():
 def display_packet_info():
     # Display packet statistics
     print("\nPacket Statistics:")
-    protocol_counts = {'IP': 0, 'TCP': 0, 'UDP': 0, 'Other': 0}
+    protocol_counts = {'TCP': 0, 'UDP': 0, 'Other': 0}
 
     for packet in captured_packets:
         if IP in packet:
-            protocol_counts['IP'] += 1
             if TCP in packet:
                 protocol_counts['TCP'] += 1
             elif UDP in packet:
@@ -36,7 +35,7 @@ def display_packet_info():
     labels = list(protocol_counts.keys())
     values = list(protocol_counts.values())
     plt.pie(values, labels=labels, autopct='%1.1f%%')
-    plt.title('Protocol Distribution')
+    plt.title('Transport Layer Protocol Distribution')
     plt.show()
 
 if __name__ == "__main__":
