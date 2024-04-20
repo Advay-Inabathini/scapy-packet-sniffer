@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Packet Capture Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <h1>Captured Packets</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Source IP</th>
+                <th>Destination IP</th>
+                <th>Protocol</th>
+                <th>Info</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for packet in packets %}
+            <tr>
+                {% if packet.haslayer('IP') %}
+                <td>{{ packet['IP'].src }}</td>
+                <td>{{ packet['IP'].dst }}</td>
+                <td>{{ packet['IP'].proto }}</td>
+                {% else %}
+                <td>Unknown</td>
+                <td>Unknown</td>
+                <td>Unknown</td>
+                {% endif %}
+                <td>{{ packet.summary() }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h1>Malicious Packets</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Source IP</th>
+                <th>Destination IP</th>
+                <th>Protocol</th>
+                <th>Info</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for packet in malicious_packets %}
+            <tr>
+                {% if packet.haslayer('IP') %}
+                <td>{{ packet['IP'].src }}</td>
+                <td>{{ packet['IP'].dst }}</td>
+                <td>{{ packet['IP'].proto }}</td>
+                {% else %}
+                <td>Unknown</td>
+                <td>Unknown</td>
+                <td>Unknown</td>
+                {% endif %}
+                <td>{{ packet.summary() }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h1>Malicious Packets</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Source IP</th>
+                <th>Destination IP</th>
+                <th>Protocol</th>
+                <th>Info</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for packet in malicious_packets %}
+            <tr>
+                <td>{{ packet['IP'].src }}</td>
+                <td>{{ packet['IP'].dst }}</td>
+                <td>{{ packet['IP'].proto }}</td>
+                <td>{{ packet.summary() }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Protocol Distribution</h2>
+    <div id="protocol-distribution"></div>
+
+    <h2>Source Website Distribution</h2>
+    <div id="website-distribution"></div>
+
+    <h2>Packet Timeline</h2>
+    <div id="packet-timeline"></div>
+
+    <script>
+    var protocolDistribution = {{ protocol_distribution|tojson }};
+    var protocolLabels = protocolDistribution.labels;
+    var protocolValues = protocolDistribution.values;
+    Plotly.newPlot('protocol-distribution', [{ labels: protocolLabels, values: protocolValues, type: 'pie' }], {}, { displayModeBar: false });
+
+    </script>
+</body>
+</html>
