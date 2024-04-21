@@ -11,6 +11,14 @@ import geoip2.database
 # Path to the GeoLite2 City database file
 DATABASE_PATH = 'GeoLite2-City.mmdb'
 
+PROTOCOL_NAMES = {
+    1: "ICMP",
+    6: "TCP",
+    17: "UDP",
+    4: "IPv4",
+    # ... Add more entries for relevant protocols
+}
+
 app = Flask(__name__)
 
 # Global variables
@@ -30,7 +38,7 @@ def process_packet(packet):
         packet_info = {
             'src_ip': packet[IP].src,
             'dst_ip': packet[IP].dst,
-            'protocol': packet[IP].proto,
+            'protocol': PROTOCOL_NAMES.get(packet[IP].proto),
             'length': len(packet),
             'info': packet.summary()
         }
@@ -133,12 +141,6 @@ def generate_dashboard_data():
         'total_packets': total_packets,
         'protocol_counts': protocol_counts,
         'top_talkers': resolved_top_talkers,  # Use resolved_top_talkers with domain names
-        'sample_packets': resolved_packets[:10],
-    }
-    return {
-        'total_packets': total_packets,
-        'protocol_counts': protocol_counts,
-        'top_talkers': top_talkers,
         'sample_packets': resolved_packets[:10],
     }
 

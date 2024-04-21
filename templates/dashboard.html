@@ -12,6 +12,11 @@
     
     <h2>Protocol Distribution</h2>
     <div id="protocol-chart"></div>
+    <ul>
+  {% for protocol, count in data.protocol_counts.items() %}
+    <li>{{ protocol }}: {{ count }}</li>
+  {% endfor %}
+</ul>
 
     <h2>Top Talkers</h2>
 <ul>
