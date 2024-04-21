@@ -28,6 +28,20 @@ def process_packet(packet):
         }
         packet_data.append(packet_info)
 
+# Function to generate dashboard data
+def generate_dashboard_data():
+    global packet_data
+    total_packets = len(packet_data)
+    protocol_counts = Counter([p['protocol'] for p in packet_data])
+    top_talkers = Counter([p['src_ip'] for p in packet_data]).most_common(5)
+    sample_packets = packet_data[:10]  # Get a sample of packet details (first 10 packets)
+    return {
+        'total_packets': total_packets,
+        'protocol_counts': protocol_counts,
+        'top_talkers': top_talkers,
+        'sample_packets': sample_packets
+    }
+
 @app.route('/')
 def home():
     return render_template('home.html')
@@ -56,10 +70,8 @@ def capture():
 
 @app.route('/dashboard')
 def dashboard():
-    global packet_data
-    protocol_counts = Counter([p['protocol'] for p in packet_data])
-    top_talkers = Counter([p['src_ip'] for p in packet_data]).most_common(5)
-    return render_template('dashboard.html', packet_count=len(packet_data), protocol_counts=protocol_counts, top_talkers=top_talkers, packet_data=packet_data)
+    dashboard_data = generate_dashboard_data()
+    return render_template('dashboard.html', data=dashboard_data)
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -4,10 +4,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
     <h1>Packet Capture Summary</h1>
-    <h2>Total Packets Captured: {{ packet_count }}</h2>
+    <h2>Total Packets Captured: {{ data.total_packets }}</h2>
+    
+    <h2>Protocol Distribution</h2>
+    <div id="protocol-chart"></div>
+
+    <h2>Top Talkers</h2>
+    <ul>
+        {% for ip, count in data.top_talkers %}
+            <li>{{ ip }} ({{ count }} packets)</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Sample Packets</h2>
+    <table border="1">
+        <tr>
+            <th>Source IP</th>
+            <th>Destination IP</th>
+            <th>Protocol</th>
+            <th>Length</th>
+            <th>Info</th>
+        </tr>
+        {% for packet in data.sample_packets %}
+            <tr>
+                <td>{{ packet.src_ip }}</td>
+                <td>{{ packet.dst_ip }}</td>
+                <td>{{ packet.protocol }}</td>
+                <td>{{ packet.length }}</td>
+                <td>{{ packet.info }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    
     <a href="/">Back to Home</a>
+
+    <script>
+        // JavaScript code to generate protocol distribution chart
+        var protocolData = {{ data.protocol_counts|tojson }};
+    var protocolLabels = Object.keys(protocolData);
+    var protocolValues = Object.values(protocolData);
+
+    var data = [{
+        values: protocolValues,
+        labels: protocolLabels,
+        type: 'pie'
+    }];
+
+    var layout = {
+        title: 'Protocol Distribution'
+    };
+
+    Plotly.newPlot('protocol-chart', data, layout);
+    </script>
 </body>
 </html>
