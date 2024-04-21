@@ -14,11 +14,11 @@
     <div id="protocol-chart"></div>
 
     <h2>Top Talkers</h2>
-    <ul>
-        {% for ip, count in data.top_talkers %}
-            <li>{{ ip }} ({{ count }} packets)</li>
-        {% endfor %}
-    </ul>
+<ul>
+    {% for packet in data.top_talkers %}
+        <li>{{ packet.src_domain or packet.src_ip }} ({{ packet.count }} packets)</li>
+    {% endfor %}
+</ul>
 
     <h2>Sample Packets</h2>
     <table border="1">

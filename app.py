@@ -2,6 +2,9 @@ from flask import Flask, render_template, redirect, url_for
 from scapy.all import sniff, Ether, IP
 from threading import Thread, Event
 from collections import Counter
+import dns.resolver
+import ipaddress
+import socket
 
 app = Flask(__name__)
 
@@ -28,18 +31,63 @@ def process_packet(packet):
         }
         packet_data.append(packet_info)
 
-# Function to generate dashboard data
+import dns.resolver
+
+def resolve_dns(ip_address):
+  """
+  Attempts to resolve an IP address to a hostname, handling private IP ranges.
+  """
+  try:
+    if ipaddress.ip_interface(ip_address).is_private:
+      return f"Private IP ({ip_address})"
+    # Only resolve if IP is present in top_talkers
+    # (assuming you have a variable containing the filtered top talkers)
+    if ip_address not in Counter([p['src_ip'] for p in packet_data]).most_common(10):
+      return ip_address  # Avoid unnecessary resolution
+    hostname, aliases, addresses = socket.gethostbyaddr(ip_address)
+    return hostname
+  except Exception as e:
+    print(f"Error resolving hostname for {ip_address}: {e}")
+    return None  # Or return a specific value to indicate failure
+
 def generate_dashboard_data():
     global packet_data
     total_packets = len(packet_data)
     protocol_counts = Counter([p['protocol'] for p in packet_data])
-    top_talkers = Counter([p['src_ip'] for p in packet_data]).most_common(5)
-    sample_packets = packet_data[:10]  # Get a sample of packet details (first 10 packets)
+
+  # Resolve DNS for source and destination IPs
+    resolved_packets = []
+    for packet in packet_data:
+        packet['src_domain'] = resolve_dns(packet['src_ip'])
+        packet['dst_domain'] = resolve_dns(packet['dst_ip'])
+        resolved_packets.append(packet.copy())
+
+    resolved_ip_domains = {}
+    for packet in resolved_packets:
+        resolved_ip_domains[packet['src_ip']] = packet['src_domain']
+
+    top_talkers = Counter([p['src_ip'] for p in packet_data]).most_common(10)
+    resolved_top_talkers = []
+    for ip, count in top_talkers:
+        # Lookup domain using resolved_ip_domains dictionary
+        domain_name = resolved_ip_domains.get(ip)  # Use get() to handle missing resolutions
+        resolved_top_talkers.append({
+            'src_ip': ip,
+            'src_domain': domain_name,  # Use domain_name from lookup
+            'count': count,
+        })
+
+    return {
+        'total_packets': total_packets,
+        'protocol_counts': protocol_counts,
+        'top_talkers': resolved_top_talkers,  # Use resolved_top_talkers with domain names
+        'sample_packets': resolved_packets[:10],
+    }
     return {
         'total_packets': total_packets,
         'protocol_counts': protocol_counts,
         'top_talkers': top_talkers,
-        'sample_packets': sample_packets
+        'sample_packets': resolved_packets[:10],
     }
 
 @app.route('/')
