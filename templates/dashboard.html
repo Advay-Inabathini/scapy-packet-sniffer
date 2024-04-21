@@ -16,7 +16,7 @@
     <h2>Top Talkers</h2>
 <ul>
     {% for packet in data.top_talkers %}
-        <li>{{ packet.src_domain or packet.src_ip }} ({{ packet.count }} packets)</li>
+        <li>{{packet.website}} {{ packet.src_domain or packet.src_ip }} ({{ packet.count }} packets)</li>
     {% endfor %}
 </ul>
 
