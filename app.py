@@ -24,6 +24,52 @@ PROTOCOL_NAMES = {
     # ... Add more entries for relevant protocols
 }
 
+"""
+At the command line, only need to run once to install the package via pip:
+
+$ pip install google-generativeai
+"""
+
+import google.generativeai as genai
+
+genai.configure(api_key="MAHKEY")
+
+# Set up the model
+generation_config = {
+  "temperature": 1,
+  "top_p": 0.95,
+  "top_k": 0,
+  "max_output_tokens": 8192,
+}
+
+safety_settings = [
+  {
+    "category": "HARM_CATEGORY_HARASSMENT",
+    "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+  },
+  {
+    "category": "HARM_CATEGORY_HATE_SPEECH",
+    "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+  },
+  {
+    "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+    "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+  },
+  {
+    "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
+    "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+  },
+]
+
+system_instruction = "You are a cybersecurity expert responding to a common user with no knowledge of cybersecurity. The common user is giving you data about packets he captured on his device. He wants to get insights from this data and already knows the meaning of the data. Just give him insights you can take away from the data. (when giving insights based on history, keep both the capture time and total packets in mind, the total packets might be lesser because the capture time is lesser and not because the traffic reduced)"
+
+model = genai.GenerativeModel(model_name="gemini-1.5-pro-latest",
+                              generation_config=generation_config,
+                              system_instruction=system_instruction,
+                              safety_settings=safety_settings)
+
+convo = model.start_chat(history=[])
+
 app = Flask(__name__)
 
 # Global variables
@@ -210,9 +256,16 @@ def stop_capture():
 def capture():
     return render_template('capture.html')
 
+from mistletoe import markdown
+
 @app.route('/dashboard')
 def dashboard():
     dashboard_data = generate_dashboard_data()
+    # Send data to GenerativeAI and get insights
+    convo.send_message(str(dashboard_data))
+    insights = markdown(convo.last.text)
+    
+    dashboard_data['insights'] = insights
     return render_template('dashboard.html', data=dashboard_data)
 
 if __name__ == '__main__':
