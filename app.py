@@ -45,7 +45,8 @@ def process_packet(packet):
             'dst_ip': packet[IP].dst,
             'protocol': PROTOCOL_NAMES.get(packet[IP].proto),
             'length': len(packet),
-            'info': packet.summary()
+            'info': packet.summary(),
+            'timestamp': packet.time
         }
         packet_data.append(packet_info)
 
@@ -112,7 +113,7 @@ def get_website(ip):
         return ""
 
 from flask import g
-
+from collections import defaultdict
 
 def generate_dashboard_data():
     global packet_data
@@ -121,6 +122,25 @@ def generate_dashboard_data():
 
     total_packets = len(packet_data)
     protocol_counts = Counter([p['protocol'] for p in packet_data])
+
+    packets_per_second = defaultdict(int)
+
+    # Extract timestamp information and count packets per second
+    for packet in packet_data:
+        timestamp = packet['timestamp']
+        # Convert timestamp to integer representing seconds
+        timestamp_seconds = int(timestamp)
+        # Increment packet count for the corresponding second
+        packets_per_second[timestamp_seconds] += 1
+
+    # Convert packets_per_second dictionary to list of tuples
+    packets_per_second_list = list(packets_per_second.items())
+    # Sort the list based on timestamp
+    packets_per_second_list.sort(key=lambda x: x[0])
+
+    # Extract timestamps and packet counts for plotting
+    timestamps = [x[0] for x in packets_per_second_list]
+    packet_counts = [x[1] for x in packets_per_second_list]
 
   # Resolve DNS for source and destination IPs
     resolved_packets = []
@@ -156,6 +176,7 @@ def generate_dashboard_data():
         'top_talkers': resolved_top_talkers,  # Use resolved_top_talkers with domain names
         'sample_packets': resolved_packets[:10],
         'time': capture_duration,
+        'packets_per_second': packets_per_second_list,  # Add packets per second data
     }
 
 @app.route('/')

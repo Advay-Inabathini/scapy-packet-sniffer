@@ -10,6 +10,9 @@
     <h1>Packet Capture Summary</h1>
     <h2>Total Packets Captured: {{ data.total_packets }}</h2>
     <h3>Capture Duration: {{ data.time }} seconds</h3>
+
+    <h2>Packets Over Time</h2>
+    <div id="packets-over-time-chart"></div>
     
     <h2>Protocol Distribution</h2>
     <div id="protocol-chart"></div>
@@ -65,6 +68,34 @@
     };
 
     Plotly.newPlot('protocol-chart', data, layout);
+
+    var packetsData = {{ data.packets_per_second|tojson }};
+  var seconds = packetsData.map(x => x[0]);
+  var packetCounts = packetsData.map(x => x[1]);
+
+  var trace1 = {
+    x: seconds,
+    y: packetCounts,
+    mode: 'lines',
+    name: 'Packets Received'
+  };
+
+  var data = [trace1];
+
+  var layout = {
+    title: 'Packets Received Over Time',
+    xaxis: {
+      title: 'Time (Seconds)'
+    },
+    yaxis: {
+      title: 'Number of Packets'
+    }
+  };
+
+  Plotly.newPlot('packets-over-time-chart', data, layout);
+</script>
+
+
     </script>
 </body>
 </html>
