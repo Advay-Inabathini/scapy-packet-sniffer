@@ -70,11 +70,17 @@
     Plotly.newPlot('protocol-chart', data, layout);
 
     var packetsData = {{ data.packets_per_second|tojson }};
-  var seconds = packetsData.map(x => x[0]);
+  var timestamps = packetsData.map(x => x[0]);
   var packetCounts = packetsData.map(x => x[1]);
 
+  // Convert timestamps to human-readable format
+  var formattedTimestamps = timestamps.map(timestamp => {
+    var date = new Date(timestamp * 1000); // Convert Unix epoch to milliseconds
+    return date.toLocaleTimeString(); // Convert to local date and time format
+  });
+
   var trace1 = {
-    x: seconds,
+    x: formattedTimestamps,
     y: packetCounts,
     mode: 'lines',
     name: 'Packets Received'
@@ -85,7 +91,7 @@
   var layout = {
     title: 'Packets Received Over Time',
     xaxis: {
-      title: 'Time (Seconds)'
+      title: 'Time'
     },
     yaxis: {
       title: 'Number of Packets'
