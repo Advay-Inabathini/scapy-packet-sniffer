@@ -5,6 +5,11 @@ from collections import Counter
 import dns.resolver
 import ipaddress
 import socket
+import time
+from datetime import datetime
+
+capture_start_time = None
+capture_end_time = None
 
 import geoip2.database
 
@@ -104,10 +109,16 @@ def get_website(ip):
             return location
     except (socket.herror, socket.gaierror):
         # Handle the case where DNS lookup fails
-        ""
+        return ""
+
+from flask import g
+
 
 def generate_dashboard_data():
     global packet_data
+
+    capture_duration = capture_end_time - capture_start_time
+
     total_packets = len(packet_data)
     protocol_counts = Counter([p['protocol'] for p in packet_data])
 
@@ -124,6 +135,7 @@ def generate_dashboard_data():
 
     top_talkers = Counter([p['src_ip'] for p in packet_data]).most_common(10)
     resolved_top_talkers = []
+    capture_duration = capture_end_time - capture_start_time
     for ip, count in top_talkers:
         # Lookup domain using resolved_ip_domains dictionary
         domain_name = resolved_ip_domains.get(ip)  # Use get() to handle missing resolutions
@@ -135,6 +147,7 @@ def generate_dashboard_data():
             'count': count,
             'location': location,
             'website': website,
+            'time': capture_duration,
         })
 
     return {
@@ -142,6 +155,7 @@ def generate_dashboard_data():
         'protocol_counts': protocol_counts,
         'top_talkers': resolved_top_talkers,  # Use resolved_top_talkers with domain names
         'sample_packets': resolved_packets[:10],
+        'time': capture_duration,
     }
 
 @app.route('/')
@@ -151,6 +165,8 @@ def home():
 @app.route('/start_capture')
 def start_capture():
     global sniffing_thread
+    global capture_start_time
+    capture_start_time = time.time()
     # Clear stop_sniffing_event flag before starting capture
     stop_sniffing_event.clear()
     # Start a new thread for packet sniffing
@@ -159,8 +175,11 @@ def start_capture():
     return redirect(url_for('capture'))
 
 @app.route('/stop_capture')
+
 def stop_capture():
     global stop_sniffing_event
+    global capture_end_time
+    capture_end_time = time.time()
     # Set stop_sniffing_event flag to stop packet capture
     stop_sniffing_event.set()
     sniffing_thread.join()
