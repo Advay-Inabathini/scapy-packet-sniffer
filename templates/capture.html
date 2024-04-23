@@ -27,10 +27,13 @@
 </head>
 <body data-bs-theme="dark">
     <div class="container">
-        <h1>Capturing Packets...</h1>
-    <a href="/stop_capture">Stop Capturing</a>
+    <div class="position-absolute top-0 start-50 translate-middle-x mt-5" style="text-align: center;"> 
+        <h1 style="font-size: 4rem;">Capturing Packets...</h1>
+    <a class="btn btn-outline-primary mb-5 mt-2" href="/stop_capture">Stop Capturing</a>
+    </div>
 
-    <div class="accordion" id="accordionExample" style="--bs-accordion-bg: #111827;">
+
+    <div class="accordion position-absolute top-50 start-50 translate-middle" id="accordionExample" style="--bs-accordion-bg: #111827;">
         <div class="accordion-item">
           <h2 class="accordion-header">
             <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
