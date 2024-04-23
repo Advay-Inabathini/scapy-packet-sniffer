@@ -5,29 +5,84 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <style>
+        body {
+            background-color:#111827 ;
+        }
+
+        .module {
+            background-color: #1F2937;
+            border-color: #374151 ;
+            padding: 1rem;
+            border-radius: 0.5rem;
+        }
+
+
+    </style>
 </head>
-<body>
-    <h1>Packet Capture Summary</h1>
-    <h2>Total Packets Captured: {{ data.total_packets }}</h2>
-    <h3>Capture Duration: {{ data.time }} seconds</h3>
+<body data-bs-theme="dark">
+    <div class="container">
+        <h1 class="mt-5 mb-2">Packet Capture Summary</h1>
+    <div class="module mb-4">
+        <div class="row">
+            <div class="col-lg-6 text-secondary-emphasis">
+                <h6 >Total Packets Captured: {{ data.total_packets }}</h6>
+            </div>
+            <div class="col-lg-6 text-secondary-emphasis" style="text-align: left;">
+                <h6>Capture Duration: {{ data.time }} seconds</h6>
+            </div>
+        </div>
+    </div>
+    
 
     <h2>Packets Over Time</h2>
     <div id="packets-over-time-chart"></div>
     
-    <h2>Protocol Distribution</h2>
+    <div class="row">
+        <div class="col-lg-6">
+            <h2>Protocol Distribution</h2>
     <div id="protocol-chart"></div>
-    <ul>
-  {% for protocol, count in data.protocol_counts.items() %}
-    <li>{{ protocol }}: {{ count }}</li>
-  {% endfor %}
-</ul>
-
+        </div>
+        <div class="col-lg-6">
+                   
     <h2>Top Talkers</h2>
-<ul>
-    {% for packet in data.top_talkers %}
-        <li>{{packet.website}} {{ packet.src_domain or packet.src_ip }} ({{ packet.count }} packets)</li>
-    {% endfor %}
-</ul>
+    <!-- <ul>
+        {% for packet in data.top_talkers %}
+            <li>{{packet.website}} {{ packet.src_domain or packet.src_ip }} ({{ packet.count }} packets)</li>
+        {% endfor %}
+    </ul> -->
+    <ul>
+        
+        <li> Private IP (10.29.238.174) (36 packets)</li>
+    
+        <li>Advays-A-Sus Private IP (10.29.250.65) (31 packets)</li>
+    
+        <li>ANAKIN Private IP (10.29.103.59) (26 packets)</li>
+    
+        <li> 20.190.146.33 (16 packets)</li>
+    
+        <li>DESKTOP-KNE6D1T Private IP (10.29.243.218) (10 packets)</li>
+    
+        <li>DESKTOP-QOUSK9R Private IP (10.29.41.184) (10 packets)</li>
+    
+        <li> Private IP (10.29.14.166) (7 packets)</li>
+    
+        <li>MACBOOKPRO-0D72 Private IP (10.29.114.201) (6 packets)</li>
+    
+        <li> Private IP (10.29.242.235) (6 packets)</li>
+    
+        <li> Private IP (10.29.175.191) (6 packets)</li>
+    
+    </ul>
+        </div>
+    </div>
+    
+
+
+ 
 
 <h2>Insights</h2>
 <!-- {{ data.insights|safe }} -->
@@ -75,7 +130,7 @@
             <th>Length</th>
             <th>Info</th>
         </tr>
-        {% for packet in data.sample_packets %}
+        <!-- {% for packet in data.sample_packets %}
             <tr>
                 <td>{{ packet.src_ip }}</td>
                 <td>{{ packet.dst_ip }}</td>
@@ -83,11 +138,95 @@
                 <td>{{ packet.length }}</td>
                 <td>{{ packet.info }}</td>
             </tr>
-        {% endfor %}
+        {% endfor %} -->
+        <tr>
+            <td>10.29.250.65</td>
+            <td>163.70.143.60</td>
+            <td>TCP</td>
+            <td>54</td>
+            <td>Ether / IP / TCP 10.29.250.65:61379 &gt; 163.70.143.60:https A</td>
+        </tr>
+    
+        <tr>
+            <td>10.29.18.93</td>
+            <td>224.0.0.251</td>
+            <td>UDP</td>
+            <td>185</td>
+            <td>Ether / IP / UDP / DNS Qry &#34;b&#39;Varun\xe2\x80\x99s iPad._companion-link._tcp.local.&#39;&#34; </td>
+        </tr>
+    
+        <tr>
+            <td>10.29.232.107</td>
+            <td>224.0.0.251</td>
+            <td>UDP</td>
+            <td>185</td>
+            <td>Ether / IP / UDP / DNS Qry &#34;b&#39;Varun\xe2\x80\x99s iPad._companion-link._tcp.local.&#39;&#34; </td>
+        </tr>
+    
+        <tr>
+            <td>10.29.114.201</td>
+            <td>224.0.0.251</td>
+            <td>UDP</td>
+            <td>198</td>
+            <td>Ether / IP / UDP / DNS Ans &#34;[b&#39;model=MacBookPro18,1&#39;, b&#39;osxvers=23&#39;, b&#39;icolor=2&#39;]&#34; </td>
+        </tr>
+    
+        <tr>
+            <td>10.29.211.206</td>
+            <td>224.0.0.251</td>
+            <td>UDP</td>
+            <td>375</td>
+            <td>Ether / IP / UDP / DNS Qry &#34;b&#39;_rdlink._tcp.local.&#39;&#34; </td>
+        </tr>
+    
+        <tr>
+            <td>10.29.164.7</td>
+            <td>224.0.0.251</td>
+            <td>UDP</td>
+            <td>96</td>
+            <td>Ether / IP / UDP / DNS Qry &#34;b&#39;Padmanabh._companion-link._tcp.local.&#39;&#34; </td>
+        </tr>
+    
+        <tr>
+            <td>10.29.231.252</td>
+            <td>224.0.0.251</td>
+            <td>UDP</td>
+            <td>213</td>
+            <td>Ether / IP / UDP / DNS Ans &#34;[b&#39;rpBA=B1:DD:25:5D:20:72&#39;, b&#39;rpAD=8ab6d382ec37&#39;, b&#39;rpFl=0x30040&#39;, b&#39;rpHN=0d6cde9fc0b8&#39;, b&#39;rpMac=0&#39;, b&#39;rpVr=542.1&#39;]&#34; </td>
+        </tr>
+    
+        <tr>
+            <td>10.29.18.93</td>
+            <td>224.0.0.251</td>
+            <td>UDP</td>
+            <td>105</td>
+            <td>Ether / IP / UDP / DNS Qry &#34;b&#39;Aditya MacBook Pro._companion-link._tcp.local.&#39;&#34; </td>
+        </tr>
+    
+        <tr>
+            <td>10.29.232.107</td>
+            <td>224.0.0.251</td>
+            <td>UDP</td>
+            <td>105</td>
+            <td>Ether / IP / UDP / DNS Qry &#34;b&#39;Aditya MacBook Pro._companion-link._tcp.local.&#39;&#34; </td>
+        </tr>
+    
+        <tr>
+            <td>10.29.3.117</td>
+            <td>224.0.0.251</td>
+            <td>UDP</td>
+            <td>206</td>
+            <td>Ether / IP / UDP / DNS Ans &#34;b&#39;Tanmay\xe2\x80\x99s MacBook Air._companion-link._tcp.local.&#39;&#34; </td>
+        </tr>
+    
+</table>
+
     </table>
     
     <a href="/">Back to Home</a>
 
+    </div>
+    
     <script>
         // JavaScript code to generate protocol distribution chart
         var protocolData = {{ data.protocol_counts|tojson }};
