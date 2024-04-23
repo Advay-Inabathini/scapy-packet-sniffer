@@ -57,74 +57,18 @@
             
             <h3>Top Talkers</h3>
             <div class="module border">
-                <!-- <ul>
+                <ul>
                     {% for packet in data.top_talkers %}
                         <li>{{packet.website}} {{ packet.src_domain or packet.src_ip }} ({{ packet.count }} packets)</li>
                     {% endfor %}
-                </ul> -->
-                <ul>
-                    
-                    <li> Private IP (10.29.238.174) (36 packets)</li>
-                
-                    <li>Advays-A-Sus Private IP (10.29.250.65) (31 packets)</li>
-                
-                    <li>ANAKIN Private IP (10.29.103.59) (26 packets)</li>
-                
-                    <li> 20.190.146.33 (16 packets)</li>
-                
-                    <li>DESKTOP-KNE6D1T Private IP (10.29.243.218) (10 packets)</li>
-                
-                    <li>DESKTOP-QOUSK9R Private IP (10.29.41.184) (10 packets)</li>
-                
-                    <li> Private IP (10.29.14.166) (7 packets)</li>
-                
-                    <li>MACBOOKPRO-0D72 Private IP (10.29.114.201) (6 packets)</li>
-                
-                    <li> Private IP (10.29.242.235) (6 packets)</li>
-                
-                    <li> Private IP (10.29.175.191) (6 packets)</li>
-                
                 </ul>
+                
                     </div>
                 </div>
             </div>
                    
 <div class="mb-5">
-    <!-- {{ data.insights|safe }} -->
-
-<h2>Analysis of Captured Packets:</h2>
-<p><strong>Overall Traffic:</strong></p>
-<ul>
-<li><strong>High volume of UDP traffic:</strong>  You have a total of 11,750 packets, with a significant majority (10,415) using the UDP protocol. UDP is often used for real-time applications like streaming or gaming due to its speed, but it lacks the reliability of TCP.</li>
-<li><strong>Lower volume of TCP traffic:</strong> There are 1,335 TCP packets, which are typically used for reliable data transmission like web browsing, file transfers, and emails.</li>
-</ul>
-<p><strong>Top Talkers:</strong></p>
-<ul>
-<li><strong>Predominantly internal network activity:</strong> Most of the top talkers seem to be within your private network, indicated by private IP addresses (starting with 10.29). This is expected for local network devices communicating with each other.</li>
-<li><strong>External communication:</strong> There's also communication with external servers, like the ones associated with "bom07s29-in-f4.1e100.net" and "server-108-158-61-108.bom78.r.cloudfront.net". These could be related to content delivery networks or cloud services.</li>
-<li><strong>Device identification:</strong> Some devices are identified by name, like "Advays-A-Sus" and "ANAKIN". These could be computers, mobile devices, or other network-connected equipment.</li>
-</ul>
-<p><strong>Sample Packets:</strong></p>
-<ul>
-<li><strong>DNS queries and responses:</strong> Several packets involve DNS (Domain Name System) queries and responses. This is a normal part of network communication, as devices use DNS to translate domain names (like google.com) into IP addresses.</li>
-<li><strong>mDNS traffic:</strong> The presence of ".local" domains suggests the use of mDNS (multicast DNS) for service discovery on the local network. This is common for devices like printers or media servers.</li>
-<li><strong>NBNS traffic:</strong> We see NBNS (NetBIOS Name Service) traffic, which is used for name resolution in older Windows networks.</li>
-</ul>
-<p><strong>Potential Concerns:</strong></p>
-<ul>
-<li><strong>High UDP traffic:</strong>  While UDP is normal for certain applications, a consistently high volume might warrant further investigation, especially if you're not actively using bandwidth-intensive applications. It could indicate background activity or potential malware communication.</li>
-<li><strong>Unidentified devices:</strong>  Devices with empty website fields or unclear names should be identified to ensure they are authorized and secure.</li>
-<li><strong>External communication:</strong> Analyzing the nature of external communication is crucial to identify any potential risks or unauthorized data transfers.</li>
-</ul>
-<p><strong>Recommendations:</strong></p>
-<ul>
-<li><strong>Monitor network activity over time:</strong> Observe if the high UDP traffic persists and investigate any unusual patterns.</li>
-<li><strong>Identify unknown devices:</strong> Determine the purpose of devices with unclear information and ensure their security.</li>
-<li><strong>Analyze external communication:</strong> Investigate the domains and IP addresses involved in external communication to ensure they are legitimate and trustworthy.</li>
-<li><strong>Consider implementing security measures:</strong> Depending on your network environment and concerns, you might consider using firewalls, intrusion detection systems, or other security tools to enhance network protection.</li>
-</ul>
-<p><strong>Please note that this analysis is based on a limited snapshot of your network traffic. A more comprehensive understanding would require longer-term monitoring and deeper investigation.</strong></p>
-
+    {{ data.insights|safe }}
 </div>
 
 
@@ -138,7 +82,7 @@
                 <th>Length</th>
                 <th>Info</th>
             </tr>
-            <!-- {% for packet in data.sample_packets %}
+            {% for packet in data.sample_packets %}
                 <tr>
                     <td>{{ packet.src_ip }}</td>
                     <td>{{ packet.dst_ip }}</td>
@@ -146,86 +90,7 @@
                     <td>{{ packet.length }}</td>
                     <td>{{ packet.info }}</td>
                 </tr>
-            {% endfor %} -->
-            <tr>
-                <td>10.29.250.65</td>
-                <td>163.70.143.60</td>
-                <td>TCP</td>
-                <td>54</td>
-                <td>Ether / IP / TCP 10.29.250.65:61379 &gt; 163.70.143.60:https A</td>
-            </tr>
-        
-            <tr>
-                <td>10.29.18.93</td>
-                <td>224.0.0.251</td>
-                <td>UDP</td>
-                <td>185</td>
-                <td>Ether / IP / UDP / DNS Qry &#34;b&#39;Varun\xe2\x80\x99s iPad._companion-link._tcp.local.&#39;&#34; </td>
-            </tr>
-        
-            <tr>
-                <td>10.29.232.107</td>
-                <td>224.0.0.251</td>
-                <td>UDP</td>
-                <td>185</td>
-                <td>Ether / IP / UDP / DNS Qry &#34;b&#39;Varun\xe2\x80\x99s iPad._companion-link._tcp.local.&#39;&#34; </td>
-            </tr>
-        
-            <tr>
-                <td>10.29.114.201</td>
-                <td>224.0.0.251</td>
-                <td>UDP</td>
-                <td>198</td>
-                <td>Ether / IP / UDP / DNS Ans &#34;[b&#39;model=MacBookPro18,1&#39;, b&#39;osxvers=23&#39;, b&#39;icolor=2&#39;]&#34; </td>
-            </tr>
-        
-            <tr>
-                <td>10.29.211.206</td>
-                <td>224.0.0.251</td>
-                <td>UDP</td>
-                <td>375</td>
-                <td>Ether / IP / UDP / DNS Qry &#34;b&#39;_rdlink._tcp.local.&#39;&#34; </td>
-            </tr>
-        
-            <tr>
-                <td>10.29.164.7</td>
-                <td>224.0.0.251</td>
-                <td>UDP</td>
-                <td>96</td>
-                <td>Ether / IP / UDP / DNS Qry &#34;b&#39;Padmanabh._companion-link._tcp.local.&#39;&#34; </td>
-            </tr>
-        
-            <tr>
-                <td>10.29.231.252</td>
-                <td>224.0.0.251</td>
-                <td>UDP</td>
-                <td>213</td>
-                <td>Ether / IP / UDP / DNS Ans &#34;[b&#39;rpBA=B1:DD:25:5D:20:72&#39;, b&#39;rpAD=8ab6d382ec37&#39;, b&#39;rpFl=0x30040&#39;, b&#39;rpHN=0d6cde9fc0b8&#39;, b&#39;rpMac=0&#39;, b&#39;rpVr=542.1&#39;]&#34; </td>
-            </tr>
-        
-            <tr>
-                <td>10.29.18.93</td>
-                <td>224.0.0.251</td>
-                <td>UDP</td>
-                <td>105</td>
-                <td>Ether / IP / UDP / DNS Qry &#34;b&#39;Aditya MacBook Pro._companion-link._tcp.local.&#39;&#34; </td>
-            </tr>
-        
-            <tr>
-                <td>10.29.232.107</td>
-                <td>224.0.0.251</td>
-                <td>UDP</td>
-                <td>105</td>
-                <td>Ether / IP / UDP / DNS Qry &#34;b&#39;Aditya MacBook Pro._companion-link._tcp.local.&#39;&#34; </td>
-            </tr>
-        
-            <tr>
-                <td>10.29.3.117</td>
-                <td>224.0.0.251</td>
-                <td>UDP</td>
-                <td>206</td>
-                <td>Ether / IP / UDP / DNS Ans &#34;b&#39;Tanmay\xe2\x80\x99s MacBook Air._companion-link._tcp.local.&#39;&#34; </td>
-            </tr>
+            {% endfor %}
         
     </table>
     </div>

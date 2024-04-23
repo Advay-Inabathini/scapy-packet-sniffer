@@ -30,9 +30,9 @@ At the command line, only need to run once to install the package via pip:
 $ pip install google-generativeai
 """
 
-# import google.generativeai as genai
+import google.generativeai as genai
 
-# genai.configure(api_key="Gangnam Style")
+genai.configure(api_key="MINE")
 
 # Set up the model
 generation_config = {
@@ -61,14 +61,14 @@ safety_settings = [
   },
 ]
 
-system_instruction = "You are a cybersecurity expert responding to a common user with no knowledge of cybersecurity. The common user is giving you data about packets he captured on the user's device. Give the user informative and descriptive insights you can infer from the data. (when giving insights based on history, keep both the capture time and total packets in mind, the total packets might be lesser because the capture time is lesser and not because the traffic reduced)"
+system_instruction = "You are a cybersecurity expert responding to a common user with no knowledge of cybersecurity. The common user is giving you data about packets he captured on the user's device. Give the user informative and descriptive insights you can infer from the data. (when giving insights based on history, keep both the capture time and total packets in mind, the total packets might be lesser because the capture time is lesser and not because the traffic reduced). Also the device Advays-A-Sus is the users device"
 
-# model = genai.GenerativeModel(model_name="gemini-1.5-pro-latest",
-#                               generation_config=generation_config,
-#                               system_instruction=system_instruction,
-#                               safety_settings=safety_settings)
+model = genai.GenerativeModel(model_name="gemini-1.5-pro-latest",
+                              generation_config=generation_config,
+                              system_instruction=system_instruction,
+                              safety_settings=safety_settings)
 
-# convo = model.start_chat(history=[])
+convo = model.start_chat(history=[])
 
 app = Flask(__name__)
 
@@ -262,10 +262,10 @@ from mistletoe import markdown
 def dashboard():
     dashboard_data = generate_dashboard_data()
     # Send data to GenerativeAI and get insights
-    # convo.send_message(str(dashboard_data))
-    # insights = markdown(convo.last.text)
+    convo.send_message(str(dashboard_data))
+    insights = markdown(convo.last.text)
     
-    # dashboard_data['insights'] = insights
+    dashboard_data['insights'] = insights
     return render_template('dashboard.html', data=dashboard_data)
 
 if __name__ == '__main__':
