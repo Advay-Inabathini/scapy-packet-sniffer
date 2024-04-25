@@ -1,3 +1,8 @@
+#IMPORTANT:
+#note that the code will not work by running as is. Gemini API key needed
+
+
+
 from flask import Flask, render_template, redirect, url_for
 from scapy.all import sniff, Ether, IP
 from threading import Thread, Event
@@ -270,3 +275,5 @@ def dashboard():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+print("note that the code will not work by running as is. Gemini API key needed")
